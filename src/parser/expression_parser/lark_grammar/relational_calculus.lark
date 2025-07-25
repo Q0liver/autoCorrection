@@ -1,0 +1,33 @@
+start: query
+
+query: NAME "=" "{" free_variables  "|" conditioned_variables "}"
+
+conditioned_variables: priority_condition | quantifiers | atomic | logical_condition | compare_condition 
+
+priority_condition: "(" conditioned_variables ")"
+quantifiers: all | exist
+all: "ALL" variables "(" conditioned_variables ")"
+exist: "EXIST" variables "(" conditioned_variables ")"
+atomic: NAME "(" variables ")" 
+logical_condition: not_condition | and_condition | or_condition
+not_condition: "NOT" conditioned_variables 
+and_condition: conditioned_variables "AND" conditioned_variables
+or_condition: conditioned_variables "OR" conditioned_variables
+compare_condition: (NAME | atomic | STRING) compare_operator (NAME | atomic | STRING)
+compare_operator: lt | lte | gt | gte | eq | neq 
+lt: "<"
+lte: "<="
+gt: ">"
+gte: ">="
+eq: "="
+neq: "!="
+
+
+free_variables: "(" variables ")"
+variables: NAME ("," NAME)*
+
+STRING: /"(?:[^"\\]|\\.)*"/ | /'(?:[^'\\]|\\.)*'/
+NAME: /[a-zA-Z0-9äöüÄÖÜß_*'".][a-zA-Z0-9äöüÄÖÜß_*'".]*(\(\d+\))?/
+
+%import common.WS
+%ignore WS

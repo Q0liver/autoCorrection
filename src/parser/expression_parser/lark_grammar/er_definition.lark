@@ -1,0 +1,42 @@
+start: entity_declaration | domain | relationship | order | complexity
+
+entity_declaration: NAME "=" entity_schema
+domain: "dom("NAME")" "=" value_range
+relationship: NAME "=" relation
+order: "grad("NAME")" "=" order_number
+complexity: "comp("NAME "," NAME")" "=" cardinality
+
+// entity structure
+entity_schema: "(" "{"format_x"}" "," "{"primary_key_k"}" ")"
+format_x: attributes
+primary_key_k: key("," key)*
+
+attributes: attribute ("," attribute)*
+attribute: monovalent | polyvalent | composed
+monovalent: NAME
+polyvalent: "{"NAME"}"
+composed: NAME"("attributes")"
+key: NAME
+
+// domain structure
+value_range: range
+range: simple_set | power_set | cartesian_product
+power_set: NAME "^" simple_set
+cartesian_product: simple_set ("x" simple_set)*
+simple_set: NAME
+
+// relation structure
+relation:"(" "("relation_entities")" "," "("attributes")" ")"
+relation_entities: entity ("," entity)*
+entity: NAME
+
+// order structure
+order_number: NAME
+
+// cardinality structure
+cardinality: "("NAME"," NAME")"
+
+NAME: /[a-zA-Z0-9äöüÄÖÜß_*][a-zA-Z0-9äöüÄÖÜß_*\-]*(\(\d+\))?/
+
+%import common.WS
+%ignore WS
