@@ -1,0 +1,61 @@
+Aufgabe 1
+a) 
+Anbieter = ({Name,Adresse},{Name, Adresse})
+
+b) 
+Variante 1:
+Anbieter = ({},{})
+Gericht = ({Name, Kategorie, Preis}, {Name, Preis})
+verkauft = ((Anbieter, Gericht), {})
+comp(verkauft, Anbieter) = (1,n)
+comp(verkauft, Gericht) = (1,1)
+
+Variante 2:
+Anbieter = ({},{})
+Gericht = ({Name, Kategorie}, {Name})
+verkauft = ((Anbieter, Gericht), {Preis})
+comp(verkauft, Anbieter) = (1,n)
+comp(verkauft, Gericht) = (0,n)
+
+c) 
+Fahrer = ({Mobil, Name}, {Mobil})
+Fahrzeug = ({Beschreibung, Kapazität, ID}, {ID})
+benutzt = ((Fahrer, Fahrzeug), {})
+comp(benutzt, Fahrer) = (1,1)
+comp(benutzt, Fahrzeug) = (1,1)
+
+d) 
+Gericht = ({},{})
+Bestellung = ({Datum, Uhrzeit, Adresse, Klingelname},{Datum, Uhrzeit, Adresse, Klingelname})
+Fahrer = ({},{})
+bestellt = ((Bestellung, Gericht), {})
+liefert = ((Fahrer, Bestellung), {})
+comp(liefert, Fahrer) = (1,n)
+comp(liefert, Bestellung) = (1,1)
+comp(bestellt, Greicht) = (0,n)
+comp(bestellt, Bestellung) = (1,n)
+
+Aufgabe 2
+Anbieter = ({Name,Adresse},{Name, Adresse})
+Gericht = ({Name, Kategorie}, {Name})
+Bestellung = ({Datum, Uhrzeit, Adresse, Klingelname},{Datum, Uhrzeit, Adresse, Klingelname})
+Fahrer = ({Mobil, Name}, {Mobil})
+Fahrzeug = ({Beschreibung, Kapazität, ID}, {ID})
+verkauft = ((Anbieter, Gericht), {Preis})
+comp(verkauft, Anbieter) = (1,n)
+comp(verkauft, Gericht) = (0,n)
+bestellt = ((Bestellung, Gericht), {})
+comp(bestellt, Greicht) = (0,n)
+comp(bestellt, Bestellung) = (1,n)
+liefert = ((Fahrer, Bestellung), {})
+comp(liefert, Fahrer) = (1,n)
+comp(liefert, Bestellung) = (1,1)
+comp(benutzt, Fahrer) = (1,1)
+comp(benutzt, Fahrzeug) = (1,1)
+
+Aufgabe 3
+1. Bei einer Bestellung dürfen nur Gerichte von einem Anbieter gekauft werden.
+2. Die Anzahl der Gerichte in einer Bestellung darf nicht größer sein als die Kapazität des dem Fahrer zu Verfügung 
+stehenden Fahrzeugs.
+(3.) Falls die Datenbank auch zur Erstellung von Rechnungen verwendet wird, darf sich der Preis auf der Rechnung für 
+einzelne Gerichte nicht von dem Preis bei Bestellung unterscheiden.

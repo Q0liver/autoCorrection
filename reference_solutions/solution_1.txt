@@ -1,0 +1,12 @@
+Aufgabe 1
+a) Ein Informationssystem ist ein System, das Informationen erfasst, überträgt, transformiert, speichert 
+und bereitstellt; es dient der Informationsgewinnung und umfasst auch die menschliche Komponente.
+
+b) Eine Datenbank ist eine Sammlung nicht-redundanter Daten, die von mehreren Applikationen benutzt werden.
+
+c) Datenbank: Sammlung nicht-redundanter Daten. DBMS: Software zur Verwaltung der Daten und Bereitstellung des 
+Zugriffs. Datenbanksystem (DBS): Eine oder mehrere Datenbanken zusammen mit dem DBMS.
+
+d) Dienstleistung: immaterielles Gut, das durch eine entgeltliche Tätigkeit eines Leistungsgebers für einen 
+Leistungsnehmer entsteht. Anforderungen: Qualitätsverbesserung der Dienstleistung (aus Sicht des Leistungsnehmers) 
+und Effizienzsteigerung der Leistungserstellung (aus Sicht des Leistungsgebers).

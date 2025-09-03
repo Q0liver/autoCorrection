@@ -1,0 +1,142 @@
+Aufgabe 1
+a) Q = { (x, y, z) | EXIST v, w, s (Halt(v, x, w) AND Station(s, y, z) AND v = 1) }
+b) Q = { (x, y) | EXIST a, b, c, d, e (Einsatzplan(x, y, a, b, c) AND Bus(b, d, e) OR d = 'MAN') }
+c) Q = { (x) | EXIST y (Fahrer(x, y) OR NOT(EXISTa, b, c, d, e, f (Einsatzplan(a, x, b, c, d) AND Halt(b, e, f) OR e = 'Uni'))) }
+Aufgabe 2
+a) Baum:
+[|37||73|]
+├── [|22|||]
+│   ├── [22,013|]
+│   └── [29,023|37,033]
+├── [|45||61|]
+│   ├── [41,043|45,053]
+│   ├── [53,063|61,073]
+│   └── [68,083|73,093]
+└── [|81||94|]
+    ├── [81,103|]
+    ├── [89,113|94,123]
+    └── [98,133|]
+
+b) Baum:
+[|60|||]
+├── [|37|||]
+│   ├── [|22|||]
+│   │   ├── [22,013|]
+│   │   └── [29,023|37,033]
+│   └── [|45|||]
+│       ├── [41,043|45,053]
+│       └── [53,063|60,143]
+└── [|73|||] 
+    ├── [|61|||]
+    │   ├── [61,073|]
+    │   └── [68,083|73,093]
+    └── [|81||94|]
+        ├── [81,103|]
+        ├── [89,113|94,123]
+        └── [98,133|] 
+
+Aufgabe 3
+
+a) Hierbei handelt es sich um einen Phantom Read: In Transaktion 𝑇1 wird erst eine Menge an
+Tupeln aus 𝑟 gelesen (SELECT a FROM r), die dann in Transaktion 𝑇2 zweimal erweitert
+wird (INSERT INTO r…). Das bedeutet, dass die nachfolgende SQL-Query in 𝑇1 (SELECT a
+FROM r) eine andere/größere Menge an Tupeln zurückgibt, als das davor der Fall war.
+
+b) Der Schedule weist einen Non-Repeatable Read auf. Nachdem in Transaktion 𝑇2 Tupel von
+𝑟 gelesen wurden (SELECT a FROM r), wird in Transaktion 𝑇1 ein Update auf 𝑟
+durchgeführt (UPDATE r …) und mit COMMIT bestätigt. Die darauffolgende SQL-Query in
+𝑇1 (SELECT a FROM r) könnte demnach Tupel lesen, die im Gegensatz zur
+vorherigen Anfrage unterschiedlich sind. Ohne eigene Veränderung von Tupeln in 𝑟 durch
+𝑇2 ist das Auslesen der gleichen Tupel nicht wiederholbar.
+
+c) Der Schedule weist einen Dirty Read auf, da in der Transaktion 𝑇2 möglicherweise auf
+Werten/Tupeln operiert wird, die anschließend wegen des Abbruchs der Transaktion 𝑇1 so
+nicht mehr existieren. Durch das Einfügen von Tupeln in 𝑟 in der Transaktion 𝑇1 (INSERT
+INTO r …) entstehen neue Tupel, die dann in der Transaktion 𝑇2 gelesen und
+möglicherweise verändert werden bzw. basierend auf den gelesenen Werten ein Update
+angestoßen wird (UPDATE r …). Durch den Abbruch der Transaktion 𝑇1 werden im
+Rollback diese neuen Tupel wieder rückwirkend entfernt. Das Update von 𝑟 in 𝑇2 wäre
+dann u.U. fehlerhaft, da es sich auf Werte/Tupel bezieht, die zum Zeitpunkt der
+Ausführung existierten, aber deren Entstehung anschließend als fehlerhaft beschlossen wird.
+
+Aufgabe 4
+bsp schedule angeben unmöglich zu korrigieren
+
+Aufgabe 5 
+a)
+Schedule 1: 
+A = 10
+B = 60
+
+Schedule 2: 
+A = 0
+B = 60
+
+b) 
+Variante1:
+T1: Read A
+T1: A := A - 10
+T1: Write A
+
+T2: Read A
+T2: A := A - 20
+T2: Write A
+
+T1: Read B
+T1: B := B + 10
+T1: Write B
+
+T2: Read B
+T2: B := B + 20
+T2: Write B
+
+Variante2:
+T2: Read A
+T2: A := A - 20
+T2: Write A
+
+T1: Read A
+T1: A := A - 10
+T1: Write A
+
+T1: Read B
+T1: B := B + 10
+T1: Write B
+
+T2: Read B
+T2: B := B + 20
+T2: Write B
+
+Variante 3:
+T1: Read A
+T1: A := A - 10
+T1: Write A
+
+T1: Read B
+T1: B := B + 10
+T1: Write B
+
+T2: Read A
+T2: A := A - 20
+T2: Write A
+
+T2: Read B
+T2: B := B + 20
+T2: Write B
+
+Variante 4:
+T2: Read A
+T2: A := A - 20
+T2: Write A
+
+T2: Read B
+T2: B := B + 20
+T2: Write B
+
+T1: Read A
+T1: A := A - 10
+T1: Write A
+
+T1: Read B
+T1: B := B + 10
+T1: Write B

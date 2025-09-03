@@ -1,0 +1,123 @@
+Aufgabe 1
+a)
+Mannschaft = ({Name}, {{Name} -> {Name}})
+Spiel = ({Termin, Mannschaft}, {{Termin, Mannschaft} -> {Termin, Mannschaft}})
+
+b)
+Person = ({PersonID, Vorname, Nachname, Straße, Nummer, Ort}, {{PersonID} -> {Vorname, Nachname, Straße, Nummer, Ort}})
+
+Aufgabe 2
+a) 
+D direkt 
+E direkt 
+A direkt 
+B keine 
+C transitiv
+
+b) 
+E direkt 
+A direkt 
+B direkt 
+C transitiv 
+D transitiv
+
+c) 
+E direkt 
+A direkt 
+B transitiv 
+C transitiv 
+D direkt
+
+Aufgabe 3
+a) R befindet sich in 2. Normalform! 
+Begründung: 
+Schlüssel von R: {A, D, CE}, Nicht-prime Attribute: {B}. 
+Sind alle nicht-primen Attribute voll funktional abhängig von jedem Schlüssel? 
+(d.h. für alle Schlüssel K von R gilt, dass K -> B links-minimal ist). 
+Schlüssel A und D sind atomar, daher ist K -> B links-minimal. 
+Weil nicht gilt, dass F |= C -> B und F |= E -> B, ist CE -> B links-minimal.
+
+b) R befindet sich in 2. Normalform! 
+Begründung: 
+Schlüssel von R: {B, E}, Nicht-prime Attribute: {A, C, D}. 
+Sind alle nicht-primen Attribute voll funktional abhängig von jedem Schlüssel? 
+Ja, weil beide Schlüssel K von R nur aus einem Attribut bestehen (=atomar), 
+sind alle funktionalen Abhängigkeiten K -> X mit X in {A, C, D} links-minimal.
+
+c) R befindet sich in 2. Normalform! 
+Begründung: 
+Schlüssel von R: {BC}, Nicht-prime Attribute: {A, D, E}. 
+Sind alle nicht-primen Attribute voll funktional abhängig von jedem Schlüssel? 
+BC -> A ist voll funktional, weil F |≠ B -> A und F |≠ C -> A. BC -> D ist voll funktional, 
+weil F |≠ B -> D und F |≠ C -> D. BC -> E ist voll funktional, 
+weil F |≠ B -> E und F |≠ C -> E. Für alle X in {A, D, E} gilt: BC -> X ist voll funktional.
+
+d) R befindet sich nicht in 2. Normalform! 
+Begründung: 
+Schlüssel von R: {BCD}, Nicht-prime Attribute: {A, E}. 
+Sind alle nicht-primen Attribute voll funktional abhängig von jedem Schlüssel? 
+BCD -> E ist nicht voll funktional, weil F |= CD -> E und CD ist ein Teil des Schlüssels BCD. 
+Also ist BCD -> E nicht links-minimal.
+
+Aufgabe 4
+a) R ist in 3. NF
+Begründung: 
+2. NF: Ja, siehe Aufgabe 3a. 
+3. NF: Ist kein nicht-primes Attribut transitiv abhängig von einem Schlüssel? 
+Da B nur von den Schlüsseln von R funktional abhängig ist (CE -> AB und A -> BD), 
+nicht aber von Attributmengen, die keinen Teil eines Schlüssel enthalten, 
+ist B nicht transitiv abhängig von einem der Schlüssel.
+
+b) R ist in 3. NF
+Begründung:
+2. NF: Ja, siehe Aufgabe 3b. 
+3. NF: Ist kein nicht-primes Attribut transitiv abhängig von einem Schlüssel?
+Da es keine funktionale Abhängigkeit ohne einen Schlüssel auf der linken Seite gibt 
+(B -> AC, CE -> B, BC -> BE und E -> CD), kann es keine transitiven Abhängigkeiten über eine Attributmenge geben, 
+die keinen Schlüssel enthält.
+
+c) R ist nur in 1. NF und nicht in 2./3. NF
+Begründung: 
+2. NF: Sind alle nicht-primen Attribute voll funktional abhängig von allen Schlüsseln? 
+Nein, weil F |= C -> A bzw. E gilt, sind A und E nicht voll funktional abhängig vom Schlüssel BC, 
+denn C allein reicht aus (BC -> A bzw. E ist nicht links-minimal). 
+3. NF: Nicht möglich ohne 2. NF.
+
+d) R ist nur in 1. NF und nicht in 2./3. NF
+Begründung: 
+2. NF: Sind alle nicht-primen Attribute voll funktional abhängig von allen Schlüsseln? 
+Da F |= A -> D und A eine Teilmenge des Schlüssels BA ist, 
+ist keine voll funktionale Abhängigkeit gegeben (BA -> D ist nicht links-minimal). 
+3. NF: Nicht möglich ohne 2. NF.
+
+e) R ist in 3. NF
+Begründung: 
+2. NF: Sind alle nicht-primen Attribute voll funktional abhängig von allen Schlüsseln? 
+Ja, weil es keine nicht-primen Attribute gibt. 
+3. NF: Ist kein nicht-primes Attribut transitiv abhängig von einem Schlüssel? 
+Weil es keine nicht-primen Attribute gibt, ist keines davon transitiv abhängig von einem der Schlüssel.
+
+Aufgabe 5
+a) 
+2. Normalform:
+Teilabhängig = {N, H, S, Nr, O, P}
+Item = ({I, N, H}, {I -> N, N -> H})
+Lieferant = ({L, S, Nr, O, P}, {L -> S, L -> Nr, L -> O, L -> P})
+Lieferung = ({I, L, M}, {IL -> M})
+
+b) 
+3. Normalform:
+Transitiv = {H}
+Produzenten = ({N, H}, {N -> H})
+Item = ({I, N}, {I -> N})
+Lieferant = ({L, S, Nr, O, P}, {L -> S, L -> Nr, L -> O, L -> P})
+Lieferung = ({I, L, M}, {IL -> M})
+
+c) 
+Syntheseverfahren:
+F''' = {IL -> M, I -> N, N -> H, L -> S, L -> Nr, L -> O, L -> P}
+Schlüssel: {IL}
+R1 = ({I, N}, {I -> N})
+R2 = ({L, S, Nr, O, P}, {L -> S, L -> Nr, L -> O, L -> P})
+R3 = ({N, H}, {N -> H})
+R4 = ({I, L, M}, {IL -> M})

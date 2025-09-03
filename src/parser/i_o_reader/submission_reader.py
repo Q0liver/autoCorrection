@@ -1,6 +1,7 @@
 import re
+from pprint import pprint
 
-path = "test_submission.txt"
+path = "reference_solutions\solution_9.txt"
 
 def _file_reader(filepath) -> str:
     """This function takes a filepath to a .txt file and turns its content into a string.
@@ -11,7 +12,7 @@ def _file_reader(filepath) -> str:
     Returns:
         str: .txt file content
     """
-    with open(filepath, "r") as file:
+    with open(filepath, "r", encoding="utf-8") as file:
         file_content = file.read()
 
     return file_content.casefold()
@@ -68,6 +69,6 @@ def submission_organizer(path) -> dict:
 
     return submission
 
-#sub = (submission_organizer(path))
-#print(sub["aufgabe3"])
+sub = (submission_organizer(path))
+pprint(sub)
 

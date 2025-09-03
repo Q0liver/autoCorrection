@@ -1,0 +1,151 @@
+Aufgabe 1
+
+a) Methode 1 (Direkte Transformation):
+A = ({a, x},{a -> x})
+B = ({b, y},{b -> y})
+C = ({a, b, p, q},{ab -> pq})
+Inklusionsabhängigkeiten: C[a] ⊆ A[a], C[b] ⊆ B[b]
+
+Methode 2 (Syntheseverfahren):
+F''' = {a -> x, b -> y, ab -> pq}
+Schlüssel: ab
+R1 = ({a, x},{a -> x})
+R2 = ({b, y},{b -> y})
+R3 = ({a, b, p, q},{ab -> p, ab -> q})
+
+
+b) Methode 1 (Direkte Transformation):
+F = ({u, h},{uh -> uh})
+D = ({d, u, h},{uh -> d})
+E = ({e, u, h},{uh -> e})
+Inklusionsabhängigkeiten: D[uh] ⊆ F[uh], E[uh] ⊆ F[uh]
+
+Methode 2 (Syntheseverfahren):
+F''' = {uh -> uh, uh -> d, uh -> e}
+Schlüssel: uh
+R1 = ({u, h, d, e},{uh -> d, uh -> e})
+
+
+Aufgabe 2
+
+a) 
+Variante 1:
+SELECT h.station, s.str, s.nr
+FROM Halt h, Station s
+WHERE h.linie = 1
+
+b) 
+Variante 1:
+SELECT datum, fahrer
+FROM Einsatzplan NATURAL JOIN (
+  SELECT id as bus, marke, sitze
+  FROM Bus
+  WHERE marke = 'MAN'
+)
+
+Variante 2:
+SELECT datum, fahrer
+FROM Einsatzplan INNER JOIN Bus ON bus = id
+WHERE b.marke = 'MAN'
+
+Variante 3:
+SELECT datum, fahrer
+FROM Einsatzplan, Bus
+WHERE bus = id AND marke = 'MAN'
+
+c)
+Variante 1:
+(SELECT name as fahrer
+ FROM Fahrer)
+MINUS
+(SELECT fahrer
+ FROM Einsatzplan NATURAL JOIN Halt
+ WHERE station = 'Uni')
+
+Variante 2:
+SELECT name as fahrer
+FROM Fahrer
+WHERE NOT EXISTS (
+  SELECT *
+  FROM Einsatzplan NATURAL JOIN Halt
+  WHERE station = 'Uni' AND Fahrer.name = Einsatzplan.fahrer
+)
+
+Variante 3:
+SELECT name as fahrer
+FROM Fahrer
+WHERE name NOT IN (
+  SELECT fahrer
+  FROM Einsatzplan NATURAL JOIN Halt
+  WHERE station = 'Uni'
+)
+
+Aufgabe 3
+d) 
+Variante 1:
+π fahrer (σ datum='01.07.2023' ∧ schicht='Spät'(Einsatzplan))
+
+Variante 2 :
+π fahrer (σ schicht='Spät' (σ datum='01.07.2023' (Einsatzplan)))
+
+e)
+Variante 1:
+π fahrer, id, station (σ Bus.sitze>31 (Bus ⋈ {id=bus} (Einsatzplan ⋈ Halt)))
+
+Variante 2:
+π fahrer, id, station (σ bus=id ∧ linie=id ∧ Bus.sitze>31 (Einsatzplan × Bus × Halt))
+
+f)
+π bus, station (Einsatzplan ⋈ Halt) ÷ ρ id->bus (π id (σ marke='MAN'(Bus)))
+
+Aufgabe 4
+
+g) 
+π nr, start (σ ende='Hauptbahnhof'(Linie))
+
+h) 
+Variante 1:
+π linie, minuten (Halt ⋈ station=name σ str='Taunusstraße' ∧ nr=17 (Station))
+
+Variante 2:
+π linie, minuten (Halt ⋈ station=name ∧ station=name ∧ str='Taunusstraße' ∧ nr=17 Station)
+
+i)
+Variante 1:
+
+σ datum=datk ∧ schicht=schk ∧ (start=stk ∨ ende=endk) (
+    π fahrer, datum, schicht, start, ende (Einsatzplan ⋈ linie=nr Linie) 
+    × 
+    ρ fahrer->kollege, datum->datk, schicht->schk, start->stk, ende->endk (Einsatzplan ⋈ linie=nr Linie)
+)
+
+
+Variante 2:
+
+σ datum=datk ∧ schicht=schk ∧ start=stk (
+    π fahrer, datum, schicht, start, ende (Einsatzplan ⋈ linie=nr Linie) 
+    ×
+    ρ fahrer->kollege, datum->datk, schicht->schk, start->stk, ende->endk (Einsatzplan ⋈ linie=nr Linie)
+)
+∪
+σ datum=datk ∧ schicht=schk ∧ ende=endk (
+    π fahrer, datum, schicht, start, ende (Einsatzplan ⋈ linie=nr Linie) 
+    × 
+    ρ fahrer->kollege, datum->datk, schicht->schk, start->stk, ende->endk (Einsatzplan ⋈ linie=nr Linie)
+)
+
+Variante 3:
+
+π fahrer, kollege (
+    σ datum=datk ∧ schicht=schk (
+        (ρ linie->nr(Einsatzplan) 
+        × 
+        π ρfahrer->kollege, datum->datk, schicht->schk, start->stk, ende->endk(Einsatzplan)
+        ) 
+        ⋈ 
+        ((π nr Linie) × (π ρnr->nrk Linie)
+        − 
+        π nr, nrk (σ start≠stk ∧ ende≠endk ((π nr, start, ende Linie) × (π ρnr->nrk, start->stk, ende->endk Linie)))
+        )
+    )
+)

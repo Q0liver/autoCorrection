@@ -1,0 +1,188 @@
+Aufgabe 1
+a)
+1. Daten sind redundant gespeichert:
+   - Lieferantenadresse wird mehrfach gespeichert (z.B. Logerando -> Steinweg 3, …)
+   - Name und Hersteller eines Items mehrfach gespeichert, wenn mehrere Lieferanten liefern 
+   (z.B. 1001 -> XCT 34E & Robi-Elektrik)
+2. Einfügeanomalie:
+   - Item ohne Lieferant kann nicht gespeichert werden
+   - Lieferant ohne Item kann nicht gespeichert werden
+3. Löschanomalie:
+   - Löschen eines Items kann Lieferanteninformationen verlieren
+4. Optional: Adresse ist nicht atomar -> mögliche Inkonsistenzen bei Updates oder Einfügungen
+
+b) Ist die Relation in 1. Normalform?
+- Nein, da Lieferantenadresse nicht atomar ist. 1. NF erfordert atomare Attribute 
+(z.B. Straße, Hausnummer, PLZ, Ort getrennt).
+
+c) 
+Relationen:
++------+-------------+---------------+---------------+
+| Item | ItemID (PK) | Name          | Hersteller    |
++------+-------------+---------------+---------------+
+|      | 1001        | XCT 34E       | Robi-Elektrik |
+|      | 1002        | Px 3-01 Light | Xiaotuling    |
+|      | 1003        | Bolt v01      | SAD           |
++------+-------------+---------------+---------------+
+
++-----------+-----------+----------------+--------+
+| Lieferung | Item (PK) | Lieferant (PK) | Menge  |
++-----------+-----------+----------------+--------+
+|           | 1001      | Logerando      | 100    |
+|           | 1002      | ULS            | 3000   |
+|           | 1003      | Logerando      | 25000  |
+|           | 1001      | ULS            | 250    |
++-----------+-----------+----------------+--------+
+
++-----------+----------------+-----------+---------+--------+---------------+
+| Lieferant | Name (PK)      | Straße    | Nummer  | PLZ    | Ort           |
++-----------+----------------+-----------+---------+--------+---------------+
+|           | Logerando      | Steinweg  | 3       | 12345  | Wegstein      |
+|           | ULS            | Stadtstr  | 123     | 44044  | Straßenstadt  |
++-----------+----------------+-----------+---------+--------+---------------+
+
+Funktionale Abhängigkeiten:
+{ItemID} -> {Name, Hersteller}
+{Name} -> {Straße, Nummer, PLZ, Ort}
+{ItemID, Lieferant} -> {Menge}
+
+Aufgabe 2
+a) Hauptaussagen:
+1. Eine Stadt kann Hauptstadt eines Landes sein oder keine Hauptstadt sein
+2. Ein Land hat genau eine Hauptstadt
+3. Eine Stadt liegt in genau einem Land
+4. Ein Land kann mehrere Städte haben oder keine Stadt
+
+b)
+Wenn ein Land keine Stadt hat (min. Kardinalität = 0), 
+könnte die Hauptstadt dieses Landes in einem anderen Land liegen
+
+c) Relationale Überführung:
+
+variante 1:
+STADT = ({Name, Landkreis, Land, Einwohnerzahl}, {{Name, Landkreis} -> {Land, Einwohnerzahl}})
+LAND = ({Name, Hauptstadt, Landkreis, Einwohnerzahl, Fläche}, {Name -> {Hauptstadt, Landkreis, Einwohnerzahl, Fläche}})
+
+Variante 2:
+Stadt = ({StadtID (PK), Name, Landkreis, Land, Einwohnerzahl}, {{StadtID} -> {Name, Landkreis, Land, Einwohnerzahl}})
+Land = ({LandID (PK), Name, HauptstadtID (FK), Landkreis, Einwohnerzahl, Fläche}, {{LandID} -> {Name, HauptstadtID, Landkreis, Einwohnerzahl, Fläche}})
+
+Variante 3:
+Stadt = ({Name, Landkreis, Land, Einwohnerzahl}, {{Name} -> {Landkreis, Land, Einwohnerzahl}})
+Land = ({Name, Hauptstadt, Landkreis, Einwohnerzahl, Fläche}, {{Name} -> {Hauptstadt, Landkreis, Einwohnerzahl, Fläche}})
+Hauptstadt = ({Land, Stadt}, {{Land} -> {Stadt}})
+StadtInLand = ({Land, Stadt}, {{Land} -> {Stadt}})
+
+Variante 4:
+Stadt = ({StadtID (PK), Name, Landkreis, LandID (FK), Einwohnerzahl}, {{StadtID} -> {Name, Landkreis, LandID, Einwohnerzahl}})
+Land = ({LandID (PK), Name, HauptstadtID (FK), Einwohnerzahl, Fläche}, {{LandID} -> {Name, HauptstadtID, Einwohnerzahl, Fläche}})
+Hauptstadt = ({LandID (FK), StadtID (FK)}, {{LandID} -> {StadtID}})
+StadtInLand = ({LandID (FK), StadtID (FK)}, {{LandID} -> {StadtID}})
+
+Aufgabe 3
+a) Sat(X, ΣX):
+- Menge aller Relationen über Attributen X, die die intrarelationalen Abhängigkeiten ΣX erfüllen
+
+b) Dat(R):
+- Menge aller Datenbanken über R, die Tupel über die Relationen enthalten, auch wenn Schlüsselabhängigkeiten 
+verletzt werden
+
+c) Sat(R):
+- Menge aller Datenbanken aus Dat(R), die alle Schlüsselabhängigkeiten einhalten
+
+d) Sat(ΣR):
+- Menge aller Datenbanken aus Dat(R), die die interrelationalen Abhängigkeiten ΣR erfüllen
+
+e) Sat(D):
+- Menge aller Datenbanken bezüglich eines Datenbankschemas D = (R, ΣR), die intra- und interrelationalen 
+Abhängigkeiten erfüllen
+- Sat(D) = Sat(R) ∩ Sat(ΣR)
+
+
+Aufgabe 4
+a) 
+Rechts-minimal 
+F' = {CE -> A, CE -> B, A -> B, A -> D, D -> C, D -> E}
+
+Links-minimal 
+F'' = {CE -> A, CE -> B, A -> B, A -> D, D -> C, D -> E}
+
+Redundanz
+F''' = {CE -> A, A -> B, A -> D, D -> C, D -> E}
+
+b)
+Rechts-minimal 
+F' = {B -> A, B -> C, CE -> B, BC -> B, BC -> E, E -> C, E -> D}
+
+Links-minimal 
+F'' = {B -> A, B -> C, E -> B, B -> B, B -> E, E -> C, E -> D}
+
+Redundanz 
+F''' = {B -> A, E -> B, B -> E, E -> C, E -> D}
+
+c)
+Rechts-minimal 
+F' = {B -> D, C -> A, C -> E}
+
+Links-minimal
+F'' = {B -> D, C -> A, C -> E}
+
+Redundanz
+F''' = {B -> D, C -> A, C -> E}
+
+d)
+Rechts-minimal 
+F' = {BC -> A, BC -> D, BE -> B, BE -> C, BE -> E, A -> D, A -> E}
+
+Links-minimal
+F'' = {BC -> A, BC -> D, BE -> C, BE -> E, A -> D, A -> E}
+
+Redundanz
+F''' = {BC -> A, BE -> C, A -> D, A -> E}
+
+
+Aufgabe 5
+a) 
+K := ABCDE, F ⊨ K \ {A} -> V? Ja 
+K := BCDE, F ⊨ K \ {B} -> V? Nein 
+K := BCDE, F ⊨ K \ {C} -> V? Ja 
+K := BDE, F ⊨ K \ {D} -> V? Nein 
+K := BDE, F ⊨ K \ {E} -> V? Nein 
+Schlüssel: BDE
+
+b)
+K := ABCDE, F ⊨ K \ {A} -> V? Ja 
+K := BCDE, F ⊨ K \ {B} -> V? Ja 
+K := CDE, F ⊨ K \ {C} -> V? Ja 
+K := DE, F ⊨ K \ {D} -> V? Ja 
+K := E, F ⊨ K \ {E} -> V? 
+Nein Schlüssel: E
+
+c)
+K := ABCDE, F ⊨ K \ {A} -> V? Ja 
+K := BCDE, F ⊨ K \ {B} -> V? Ja 
+K := CDE, F ⊨ K \ {C} -> V? Ja 
+K := DE, F ⊨ K \ {D} -> V? Ja
+K := E, F ⊨ K \ {E} -> V? Nein 
+Schlüssel: E
+
+d)
+K := ABCDE, F ⊨ K \ {A} -> V? Ja 
+K := BCDE, F ⊨ K \ {B} -> V? Nein 
+K := BCDE, F ⊨ K \ {C} -> V? Ja 
+K := BDE, F ⊨ K \ {D} -> V? Ja 
+K := BE, F ⊨ K \ {E} -> V? Nein 
+Schlüssel: BE
+
+e)
+K := ABCDE, F ⊨ K \ {A} -> V? Ja 
+K := BCDE, F ⊨ K \ {B} -> V? Ja 
+K := CDE, F ⊨ K \ {C} -> V? Nein 
+K := CDE, F ⊨ K \ {D} -> V? Ja 
+K := CE, F ⊨ K \ {E} -> V? Ja 
+K := C, F ⊨ K \ {C} -> V? Nein 
+Schlüssel: C
+
+Zusatzfrage zu e)
+1) CBADE
+2) CABDE

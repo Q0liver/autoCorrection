@@ -1,29 +1,68 @@
-from pprint import pprint
+trees = [
+    """PROJECT station, str, nr
+└── SELECT linie=1
+    └── CROSS
+        ├── Halt
+        └── Station""",
 
-test_tree = """
-root
-├── A
-│   ├── A1
-│   │   ├── A1a
-│   │   └── A1b
-│   └── A2
-│       ├── A2a
-│       └── A2b
-├── B
-│   ├── B1
-│   │   └── B1a
-│   └── B2
-└── C
-    ├── C1
-    ├── C2
-    │   └── C2a
-    └── C3
-        ├── C3a
-        └── C3b
-"""
+    """PROJECT datum,fahrer
+└── JOIN
+    ├── Einsatzplan
+    └── RENAME id->bus
+        └── SELECT marke="Man"
+            └── Bus""",
 
+    """\\ 
+├── RENAME name->fahrer
+│   └── PROJECT fahrer
+│       └── Fahrer 
+└── PROJECT fahrer
+    └── JOIN
+        ├── Einsatzplan
+        └── PROJECT linie
+            └── SELECT station="Uni"
+                └── Halt""",
+
+    """[|37||73|]
+├── [|22|||]
+│   ├── [22,013|]
+│   └── [29,023|37,033]
+├── [|45||61|]
+│   ├── [41,043|45,053]
+│   ├── [53,063|61,073]
+│   └── [68,083|73,093]
+└── [|81||94|]
+    ├── [81,103|]
+    ├── [89,113|94,123]
+    └── [98,133|]""",
+
+    """[|60|||]
+├── [|37|||]
+│   ├── [|22|||]
+│   │   ├── [22,013|]
+│   │   └── [29,023|37,033]
+│   └── [|45|||]
+│       ├── [41,043|45,053]
+│       └── [53,063|60,143]
+└── [|73|||] 
+    ├── [|61|||]
+    │   ├── [61,073|]
+    │   └── [68,083|73,093]
+    └── [|81||94|]
+        ├── [81,103|]
+        ├── [89,113|94,123]
+        └── [98,133|]"""
+]
 
 def ascii_tree_parser(tree):
+    """This function parses an Ascii tree into  python datastructure
+
+    Args:
+        tree (str): Ascii tree
+
+    Returns:
+        Tree structure: Parent = Dict(), Children = [], Leaf = "str"
+    """
     tree = tree.strip("\n").split("\n")
     
     root = tree[0]
@@ -71,7 +110,11 @@ def ascii_tree_parser(tree):
                 pass
     return parsed_tree
             
-pprint(ascii_tree_parser(test_tree))
-#print(repr(tree.strip("\n").split("\n")))    
+# For testing purposes
+for i in range(len(trees)):
+    print(i)
+    print(ascii_tree_parser(trees[i]))
+    print("\n")
+  
 
 

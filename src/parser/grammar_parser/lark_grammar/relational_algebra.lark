@@ -1,0 +1,58 @@
+start: operation
+
+operation: projection | selection | renaming | set_operation | priority_operation| relation
+
+projection: "PROJECT" attributes "(" (relation | suboperation) ")"
+selection: "SELECT" condition "(" (relation | suboperation) ")"
+renaming: "RENAME" rename_attributes "(" (relation | suboperation) ")"
+set_operation: operation (set_operator operation)+
+priority_operation: "("operation")"
+
+// selection structure
+condition:  priority_condition | logical_condition | compare_condition 
+priority_condition: "(" condition ")"
+logical_condition: not_condition | or_condition | and_condition
+not_condition: "NOT" condition 
+and_condition: condition "AND" condition
+or_condition: condition "OR" condition
+compare_condition: attribute compare_operator value
+compare_operator: lt | lte | gt | gte | eq | neq 
+lt: "<"
+lte: "<="
+gt: ">"
+gte: ">="
+eq: "="
+neq: "!="
+value: NAME 
+
+// renaming structure
+rename_attributes: attribute_names rename_direction attribute_names
+    | attributes rename_direction attributes 
+rename_direction: new_old | old_new
+new_old: "<-"
+old_new: "->"
+attribute_names: attribute+ 
+
+// set_operation structure
+set_operator: union | intersection | difference | crossproduct | divide | join 
+union: "UNION"
+intersection: "INTERSECTION"
+difference: "DIFFERENCE"
+crossproduct: "CROSS"
+divide: "DIVIDE"
+join: "JOIN" theta_condition?
+theta_condition: condition
+
+suboperation: operation
+attributes: attribute ("," attribute)*
+attribute: NAME
+relation: NAME
+
+NAME: /[a-zA-Z0-9äöüÄÖÜß_*".][a-zA-Z0-9äöüÄÖÜß_*".]*(\(\d+\))?/
+
+
+//%import common.INT
+%import common.WS
+%ignore WS
+
+ 
