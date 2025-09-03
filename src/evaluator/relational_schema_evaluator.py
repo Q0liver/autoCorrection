@@ -21,15 +21,16 @@ def parse(string, func_list):
         print(string)
     return pString
 
-def compare(sub, ref, func=lambda x:x):
+def relational_schema_evaluator(sub, ref, func=lambda x:x):
     refs = [func(line) for line in ref.splitlines()]
     for line in sub.splitlines():
         if func(line) not in refs:
             print("nicht gefunden:")
             print(line)
     print("done")
-#compare(sub, ref, fdp.functional_dependencies_parser)
-#compare(sub, ref, rsp.relational_schema_parser)
-#compare(sub, ref, fdp.membership_test_parser)
-#compare(sub, ref, lambda line: parse(line, (fdp.functional_dependencies_parser,rsp.relational_schema_parser,ssp.set_parser)))
-compare(sub, ref, lambda x:x)
+    
+#relational_schema_evaluator(sub, ref, fdp.functional_dependencies_parser)
+#relational_schema_evaluator(sub, ref, rsp.relational_schema_parser)
+#relational_schema_evaluator(sub, ref, fdp.membership_test_parser)
+#relational_schema_evaluator(sub, ref, lambda line: parse(line, (fdp.functional_dependencies_parser,rsp.relational_schema_parser,ssp.set_parser)))
+relational_schema_evaluator(sub, ref, lambda x:x)

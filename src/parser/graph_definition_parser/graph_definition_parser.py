@@ -23,8 +23,8 @@ def graph_definition_parser(string_graph):
     graph = ast.literal_eval(string_graph)
     return graph
 
-# For testing purposes
-for i in range(len(graphs)):
-    print(i)
-    print(graph_definition_parser(graphs[i]))
-    print("\n")
+# # For testing purposes
+# for i in range(len(graphs)):
+#     print(i)
+#     print(graph_definition_parser(graphs[i]))
+#     print("\n")

@@ -2,7 +2,7 @@ Aufgabe 1
 a) Mannschaft = ({Name, Spieltermin},{Name})
    dom(Spieltermin) = 2^Date
 b) Person = ({PersonID, Name(Vorname, Nachname), Adresse(Strasse, Nummer, Ort)},{PersonID})
-   dom(Adresse) = char(20) × int × char(20)
+   dom(Adresse) = char(20) x int x char(20)
 c) verschreibt = ((Arzt*in, Medikament, Patient*in), (Datum))
    grad(verschreibt) = 3
    comp(verschreibt, Arzt*in) = (0,n)

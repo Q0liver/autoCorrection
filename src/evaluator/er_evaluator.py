@@ -10,7 +10,7 @@ customer_vip = ({comment}, {})
    ISA(Customer_vip, customer)
 address = ({id, town, zip_code, street}, {id})
    at = ((pilot, address), {})
-      comp(at, pilot) = (1,1)
+      comp(at, pilowt) = (1,1)
       comp(at, address) = (0,n)
    at = ((airport, address), {})
       comp(at, airport) = (1,1)
@@ -62,22 +62,34 @@ plane = ({id, type, name, no_seats}, {id})
       comp(executes, flight) = (1,1)
 """
 
-testset = test.splitlines()
-testset2 = test2.splitlines()
+ref = test.splitlines()
+sub = test2.splitlines()
 
 parser = Lark.open("src/parser/grammar_parser/lark_grammar/er_definition.lark")
 
-referenceset = [AstErTransformer().transform(parser.parse(lines)) for lines in testset] 
+def evaluate_er(ref, sub):
+   """This function returns definitions from the sumbission diagramm that don't macth to the reference diagrams
 
-for line in testset2:
-    try:
-        ptree = parser.parse(line)
-        ptree = AstErTransformer().transform(ptree)
-        if ptree in referenceset:
-            continue
-        else:
-            print("nicht gefudnen: ")
-            print(line)
-    except:
-        print("nicht gefudnen: ")
-        print(line)
+   Args:
+       ref (str): set of definitions
+       sub (str): set of definitions
+
+   Return:
+      int: number of not matching definitions in the sub diagram
+   """
+   referenceset = [AstErTransformer().transform(parser.parse(lines)) for lines in ref] 
+   mismatched = []
+   for definition in sub:
+      try:
+         ptree = parser.parse(definition)
+         pdefinition = AstErTransformer().transform(ptree)
+         if pdefinition in referenceset:
+               continue
+         else:
+            mismatched.append(definition)
+      except:
+         mismatched.append(definition)
+   return mismatched
+
+#for testing purposes
+#print(evaluate_er(ref, sub))

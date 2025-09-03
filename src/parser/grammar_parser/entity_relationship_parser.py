@@ -86,8 +86,8 @@ def entity_relation_parser(str_notation):
   pTree = parser.parse(str_notation)
   return AstErTransformer().transform(pTree)
 
-# For testing purposes
-for i in range(len(definitions)):
-    print(i)
-    print(entity_relation_parser(definitions[i]))
-    print("\n")
+# # For testing purposes
+# for i in range(len(definitions)):
+#     print(i)
+#     print(entity_relation_parser(definitions[i]))
+#     print("\n")

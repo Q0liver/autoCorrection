@@ -70,5 +70,5 @@ def submission_organizer(path) -> dict:
     return submission
 
 sub = (submission_organizer(path))
-pprint(sub)
+#pprint(sub)
 

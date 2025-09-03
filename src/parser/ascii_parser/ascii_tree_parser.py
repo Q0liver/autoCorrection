@@ -54,6 +54,20 @@ trees = [
         └── [98,133|]"""
 ]
 
+def sort_tree(node):
+    """In-place sort funtion for ascii_tree_parser
+
+    Args:
+        node (dict): nodes from the tree
+    """
+    parent_name = node.get("root") or node.get("node")
+
+    if parent_name in ("UNION", "INTERSECTION", "JOIN", "CROSS"):
+        node["children"].sort(key=lambda x: x["node"]) # sort after node name
+
+    for child in node["children"]:
+        sort_tree(child)
+
 def ascii_tree_parser(tree):
     """This function parses an Ascii tree into  python datastructure
 
@@ -77,7 +91,7 @@ def ascii_tree_parser(tree):
 
     for level in content:
         level = level.replace("│", "").replace("├", "").replace("└", "").replace("─", "")
-        current_depth = len(level) - len(level.lstrip(" "))
+        current_depth = len(level) - len(level.lstrip(" ")) # blbanks indicate the tree depth
 
         if current_depth > depth:
             depth = current_depth
@@ -108,13 +122,15 @@ def ascii_tree_parser(tree):
                 stack.append((node, depth))
             except:
                 pass
+    
+    sort_tree(parsed_tree)
     return parsed_tree
-            
-# For testing purposes
-for i in range(len(trees)):
-    print(i)
-    print(ascii_tree_parser(trees[i]))
-    print("\n")
+
+# # For testing purposes
+# for i in range(len(trees)):
+#     print(i)
+#     print(ascii_tree_parser(trees[i]))
+#     print("\n")
   
 
 

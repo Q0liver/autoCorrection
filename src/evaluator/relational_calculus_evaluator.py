@@ -4,14 +4,26 @@ from deepdiff import DeepDiff
 from pprint import pprint
 
 ref="""Q = { (y, x) | ALL a, c, d, e, b (d = 'MAN' AND Bus(b, e, d) AND Einsatzplan(a, b, c, x, y)) }"""
-sub="""Q = { (x, y) | ALL a, b, c, d, e (Einsatzplan(x, y, a, b, c) AND Bus(b, d, e) AND d = 'MAN') }"""
+sub="""Q = { (y, x) | ALL a, c, d, e, b (d = 'MAN' AND Bus(b, e, d) AND Einsatzplan(a, b, c, x, y)) }"""
 
-parser = Lark.open("src/parser/expression_parser/lark_grammar/relational_calculus.lark")
+parser = Lark.open("src/parser/grammar_parser/lark_grammar/relational_calculus.lark")
 
-dif = DeepDiff(AstRcTransformer().transform(parser.parse(sub)), 
-               AstRcTransformer().transform(parser.parse(ref)))
-print(dif)
-print(AstRcTransformer().transform(parser.parse(sub)) == AstRcTransformer().transform(parser.parse(ref)))
+def relational_calculus_evaluator(ref, sub):
+    """This function checks relaional calculus definitons on equality.
 
-#print(parser.parse(sub).pretty())
-#pprint(AstRcTransformer().transform(parser.parse(ref)))
+    Args:
+        ref (str): reference expression
+        sub (str): submission expression
+
+    Returns:
+        Boolean: When False, the source of error is added.
+    """    
+    diff = DeepDiff(AstRcTransformer().transform(parser.parse(sub)), 
+                   AstRcTransformer().transform(parser.parse(ref)))
+    if not diff:
+        return True
+    else:
+        return False, diff
+
+# for testing purposes
+print(relational_calculus_evaluator(ref,sub))

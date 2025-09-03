@@ -85,18 +85,28 @@ tables = [
 """
 ]
 
-def ascii_table_parser(table):
-    """This finction transforms ASCII tables into data structure table representations
+def sort_table(table, columns):
+    """In-place sort function for ascii_table_parser.
 
     Args:
-        table string: ASCII table
+        table (list(dict())): parsed table
+        columns (str): keyset of table
+    """
+    table.sort(key=lambda row: tuple(row[col] for col in sorted(columns))) # sort rows(dicts) after column (key) (sort model)
+
+def ascii_table_parser(table):
+    """This function transforms ASCII tables into data structure table representations
+
+    Args:
+        table (string): ASCII table
 
     Returns:
-        List: Pythonn table representation
+        (List): Pythonn table representation
     """
     table = table.strip()
-    table = [line for line in table.splitlines() if "+" not in line ]
-    
+    table = [line for line in table.splitlines() if any(c.isalnum() for c in line)]
+    #table = [line for line in table.splitlines() if "+" not in line]
+  
     header = table[0].replace(" ", "").strip("|").split("|")
     content = table [1:]
     parsed_table = []
@@ -111,10 +121,12 @@ def ascii_table_parser(table):
                 cell = "-"
                 filled_row.append(cell)
         parsed_table.append(dict(zip(header, filled_row)))
+    
+    sort_table(parsed_table, parsed_table[0].keys())
     return parsed_table
 
 # For testing purposes
-for i in range(len(tables)):
-    print(i)
-    print(ascii_table_parser(tables[i]))
-    print("\n")
+# for i in range(len(tables)):
+#     print(i)
+#     print(ascii_table_parser(tables[i]))
+#     print("\n")
